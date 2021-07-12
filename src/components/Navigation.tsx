@@ -3,10 +3,10 @@ import React from 'react';
 const Navigation = () => {
   return (
     <header>
-      <nav style={{padding: '40px 0', display: 'flex', justifyContent: 'space-between'}}>
+      <nav style={{padding: '40px 20px', display: 'flex', justifyContent: 'space-between', background: 'green'}}>
         <a>logo</a>
         <div>
-          выбрать дату
+          Прогноз погоды на 
           <select>
             <option>
               сегодня
