@@ -17,9 +17,9 @@ export const Modal: React.FC<Props> = ({popup}) => {
   return (
     <div className="modal is-active">
       <div className="modal-background" onClick={onPopupClose}></div>
-      <div className="modal-card">
+      <div className="modal-card" style={{width: '90vw'}}>
         <header className="modal-card-head">
-          <p className="modal-card-title">Дополнительные даные</p>
+          <p className="modal-card-title">Extra data</p>
           <button onClick={onPopupClose} className="delete" aria-label="close"></button>
         </header>
         <section className="modal-card-body">

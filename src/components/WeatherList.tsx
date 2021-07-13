@@ -53,10 +53,14 @@ const WeatherList: React.FC = () => {
 
   return (
     <>
-    <Navigation />
+      <Navigation />
       <div className="weather" style={{margin: '30px 0'}}>
         {filteredWeather.map((day: DayWeather) => (
-            <WeatherItem key={day.dt} day={day} city={data.city.name} />
+          <WeatherItem
+            key={day.dt}
+            day={day}
+            city={data.city.name}
+          />
         ))}
       </div>
       {popup && <Modal popup={popup}/>}

@@ -3,6 +3,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { selectPopup } from '../store/reducers/weatherReducer';
 import { DayWeather } from '../weatherInterface';
+import './WeatherItem.css';
 
 type Props = {
   day: DayWeather

@@ -1,6 +1,28 @@
 .weather {
   display: grid;
-  grid-template-columns: repeat(4, 220px);
-  grid-gap: 20px;
   justify-content: center;
+  align-items: center;
+  grid-gap: 20px;
+}
+
+@media screen and (min-width: 320px) {
+  .weather {
+    grid-template-columns: repeat(1, 260px);
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .weather {
+    display: grid;
+    grid-template-columns: repeat(2, 260px);
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .weather {
+    display: grid;
+    grid-template-columns: repeat(4, 220px);
+  }
 }
