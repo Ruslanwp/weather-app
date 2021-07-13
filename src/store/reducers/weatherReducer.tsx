@@ -1,11 +1,13 @@
-import { DayWeather } from "../../weatherInterface";
+import { AllWeather, DayWeather } from "../../weatherInterface";
 
 const FETCH_WEATHER = 'FETCH_WEATHER';
 const SET_RANGE = 'SET_RANGE';
+const SET_POPUP = 'SET_POPUP';
 
 interface WeatherState {
-  weatherData: null | DayWeather[]
+  weatherData: null | AllWeather
   weatherRange: string
+  popup: null | DayWeather
 }
 
 interface WeatherAction {
@@ -15,7 +17,8 @@ interface WeatherAction {
 
 const initialState: WeatherState = {
   weatherData: null,
-  weatherRange: 'week'
+  weatherRange: 'today',
+  popup: null
 } 
 
 export const weatherReducer = (state = initialState, action: WeatherAction): WeatherState => {
@@ -32,7 +35,17 @@ export const weatherReducer = (state = initialState, action: WeatherAction): Wea
         weatherRange: action.payload
       }
 
+    case SET_POPUP:
+      return {
+        ...state,
+        popup: action.payload
+      }
+
     default:
-    return state;
+      return state;
   }
-}
+};
+
+export const setDay = (value: string) => ({type: SET_RANGE, payload: value});
+export const fetchWeather = (data: AllWeather | null) => ({type: FETCH_WEATHER, payload: data});
+export const selectPopup = (data: DayWeather | null) => ({type: SET_POPUP, payload: data});

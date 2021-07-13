@@ -1,3 +1,10 @@
+html {
+  background: white;
+  
+  /* background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Moscow_July_2011-16.jpg/1200px-Moscow_July_2011-16.jpg');
+  background-size: cover; */
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

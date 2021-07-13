@@ -39,7 +39,7 @@ export interface DayWeather {
   pop: number
   sys: Sys
   visibility: number
-  weather: StatusWeather
+  weather: StatusWeather[]
   wind: Wind
 }
 

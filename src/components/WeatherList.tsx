@@ -1,88 +1,65 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTypedSelector } from '../hooks/useTypedSelector';
-import { AllWeather } from '../weatherInterface';
+import { AllWeather, DayWeather } from '../weatherInterface';
 import Navigation from './Navigation';
-import './WeatherList.css'
-import moment from 'moment'
+import './WeatherList.css';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { getWeather } from '../api';
+import WeatherItem from './WeatherItem';
+import { Modal } from './Modal';
 
-const WeatherList: React.FC<{data: AllWeather}> = ({data}) => {
-  const today = new Date();
-  const date = `${today.getFullYear()}-${(today.getMonth()+1) < 10 ? `0${today.getMonth()+1}` : today.getMonth()+1}-${today.getDate()}`;
-  console.log(data);
+const WeatherList: React.FC = () => {
+  const data = useTypedSelector<AllWeather | null>(state => state.weather.weatherData);
+  const popup = useTypedSelector<DayWeather | null>(state => state.weather.popup);
 
-  console.log(moment().calendar());
+  const today = moment().format('l');
+  const tomorrow = moment().add(1, 'days').format('l');
 
-  const times = data.list.map(date => new Date(date.dt_txt));
-  console.log(times);
-  
+  const dispatch = useDispatch();
+  const weatherRange = useTypedSelector(state => state.weather.weatherRange);
 
-  const tomorrow = today.setDate(today.getDate() + 1);
+  useEffect(() => {
+    dispatch(getWeather());
+  }, []);
 
-  const weatherRange = useTypedSelector(state => state.weather.weatherRange)
-  
-  const filteredData = useMemo(() => {
-    return data.list.map(weather => {
-      const possibleDate = new Date(weather.dt_txt)
+  const filteredWeather = useMemo(() => {
+    if (!data) {
+      return null;
+    }
 
-      const year = possibleDate.getFullYear();
-      const month = possibleDate.getMonth();
-      const day = possibleDate.getDate();
-
-      const tomorrowDay = new Date(tomorrow).getDate();
-      // console.log(tomorrowDay);
-      // console.log(date);
-      
-      
-
+    return data.list.filter((weather: DayWeather) => {
+      const possibleDay = moment(weather.dt_txt).format('l')
 
       switch(weatherRange) {
         case 'today':
-          return(`${year}-${(month + 1) < 10 ? `0${month + 1}` : (month + 1)}-${day}`);
+          return possibleDay === today;
       
         case 'tomorrow': 
-          return(
-            `${year}-${(month + 1) < 10 ? `0${month + 1}` : (month + 1)}-${day}` === date
-          );
+          return possibleDay === tomorrow;
 
-        case 'week': 
-          return(`${year}-${(month + 1) < 10 ? `0${month + 1}` : (month + 1)}-${day}`);
+        case 'week':
+          return weather
 
         default:
-          return(`${year}-${(month + 1) < 10 ? `0${month + 1}` : (month + 1)}-${day}`);
+          return weather;
       }
     })
-  }, [weatherRange]);
+  }, [weatherRange, data]);
 
-  // console.log(filteredData);
-  
+  if (!data || !filteredWeather) {
+    return <p>Loading...</p>
+  }
 
   return (
     <>
     <Navigation />
-      <div className="weather">
-        {data.list.map(day => (
-          <div className="card">
-            <header className="card-header">
-              <p className="card-header-title">
-                {data.city.name}
-              </p>
-              <button className="card-header-icon" aria-label="more options">
-                <span className="icon">
-                  <i className="fas fa-angle-down" aria-hidden="true"></i>
-                </span>
-              </button>
-            </header>
-            <div className="card-content">
-              <div className="content">
-                <p>Минимальная температура {day.main.temp_min} C</p>
-                <p>Максимальная температура {day.main.temp_max} C</p>
-                <div>{day.main.feels_like} C</div>
-                {day.dt_txt}
-              </div>
-            </div>
-          </div>
+      <div className="weather" style={{margin: '30px 0'}}>
+        {filteredWeather.map((day: DayWeather) => (
+            <WeatherItem key={day.dt} day={day} city={data.city.name} />
         ))}
       </div>
+      {popup && <Modal popup={popup}/>}
     </>
   );
 };
